@@ -2,8 +2,7 @@ package kh.edu.istad.platform.order.restapi.integration;
 
 import kh.edu.istad.common.domain.valueobject.BusinessId;
 import kh.edu.istad.platform.order.domain.port.out.BusinessValidationPort;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientException;
@@ -15,11 +14,10 @@ public class BusinessServiceAdapter implements BusinessValidationPort {
     private final RestClient restClient;
 
     public BusinessServiceAdapter(
-            RestClient.Builder builder,
-            @Value("${business-service.url}") String businessServiceUrl
+            @LoadBalanced RestClient.Builder builder
     ) {
         this.restClient = builder
-                .baseUrl(businessServiceUrl)
+                .baseUrl("http://business-service")
                 .build();
     }
 

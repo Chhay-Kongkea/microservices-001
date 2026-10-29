@@ -23,7 +23,32 @@ spring:
 
 
 
-customer-service:
-  url: ${CUSTOMER_SERVICE_URL:http://localhost:9090}
-business-service:
-  url: ${BUSINESS_SERVICE_URL:http://localhost:9091}
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8769/eureka/
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${random.int}
+    lease-renewal-interval-in-seconds: 10
+    lease-expiration-duration-in-seconds: 30
+    statusPageUrlPath: /actuator/info
+    healthCheckUrlPath: /actuator/health
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
+
+
+
+
+
+#customer-service:
+#  url: ${CUSTOMER_SERVICE_URL:http://localhost:9090}
+#business-service:
+#  url: ${BUSINESS_SERVICE_URL:http://localhost:9091}

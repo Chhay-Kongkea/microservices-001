@@ -1,9 +1,8 @@
 package kh.edu.istad.platform.payment.restapi.integration;
 
 import kh.edu.istad.common.domain.valueobject.CustomerId;
-
 import kh.edu.istad.platform.payment.domain.port.out.CustomerValidationPort;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
@@ -13,11 +12,10 @@ public class CustomerServiceAdapter implements CustomerValidationPort {
     private final RestClient restClient;
 
     public CustomerServiceAdapter(
-            RestClient.Builder builder,
-            @Value("${customer-service.url}") String customerServiceUrl
+            @LoadBalanced RestClient.Builder builder
     ) {
         this.restClient = builder
-                .baseUrl(customerServiceUrl)
+                .baseUrl("http://customer-service")
                 .build();
     }
 

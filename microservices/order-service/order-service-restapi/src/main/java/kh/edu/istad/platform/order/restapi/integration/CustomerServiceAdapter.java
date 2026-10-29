@@ -2,7 +2,7 @@ package kh.edu.istad.platform.order.restapi.integration;
 
 import kh.edu.istad.common.domain.valueobject.CustomerId;
 import kh.edu.istad.platform.order.domain.port.out.CustomerValidationPort;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
@@ -12,16 +12,21 @@ public class CustomerServiceAdapter implements CustomerValidationPort {
     private final RestClient restClient;
 
     public CustomerServiceAdapter(
-            RestClient.Builder builder,
-            @Value("${customer-service.url}") String customerServiceUrl
+            @LoadBalanced RestClient.Builder builder
     ) {
         this.restClient = builder
-                .baseUrl(customerServiceUrl)
+                .baseUrl("http://customer-service")
                 .build();
     }
 
     @Override
     public void existById(CustomerId id) {
+        if (id == null) {
+            throw new IllegalArgumentException(
+                    "Customer ID must not be null"
+            );
+        }
+
         restClient.get()
                 .uri("/api/v1/customers/{customerId}", id.id())
                 .retrieve()
