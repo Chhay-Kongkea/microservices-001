@@ -7,5 +7,6 @@ public record InitiatePaymentRequest(
         UUID orderId,
         UUID customerId,
         BigDecimal price
+
 ) {
 }
