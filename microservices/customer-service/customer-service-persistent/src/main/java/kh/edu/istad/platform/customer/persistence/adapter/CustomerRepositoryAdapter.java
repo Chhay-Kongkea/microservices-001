@@ -38,11 +38,13 @@ public class CustomerRepositoryAdapter implements CustomerRepository {
 
     @Override
     public boolean existsByUsername(String username) {
+
         return customerJpaRepository.existsByUsername(username);
     }
 
     @Override
     public boolean existsByEmail(String email) {
+
         return customerJpaRepository.existsByEmail(email);
     }
 

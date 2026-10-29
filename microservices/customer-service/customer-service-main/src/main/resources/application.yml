@@ -4,9 +4,9 @@ spring:
     name: customer-service
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/customer_db
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/customer_db}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -19,4 +19,3 @@ spring:
 
 server:
   port: 9090
-

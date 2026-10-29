@@ -1,7 +1,7 @@
 package kh.edu.istad.platform.customer.restapi.exception;
 
+import kh.edu.istad.common.domain.dto.ApiErrorResponse;
 import kh.edu.istad.platform.customer.domain.exception.CustomerDomainException;
-import kh.edu.istad.platform.customer.restapi.dto.ApiErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;

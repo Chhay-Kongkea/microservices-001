@@ -1,6 +1,7 @@
 package kh.edu.istad.common.domain.valueobject;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 
 // 150$ new Money(150)
@@ -10,15 +11,51 @@ public record Money(
         BigDecimal amount
 ) {
 
-   public void isGreaterThanZero(){
+    public static final Money ZERO = new Money(BigDecimal.ZERO);
 
-       if(!(amount.compareTo(BigDecimal.ZERO) > 0)){
-           System.out.println("This number greater that 0");
-           throw new RuntimeException("This number greater that 0");
+    public boolean isGreaterThanZero(){
 
-       }
+        return this.amount != null && this.amount.compareTo(BigDecimal.ZERO) > 0;
 
-   }
+    }
+
+    public boolean isLessThanZero(){
+
+        return this.amount != null && this.amount.compareTo(BigDecimal.ZERO) < 0;
+
+    }
+
+
+
+    public boolean isLessThan(Money other){
+
+        return this.amount != null && this.amount.compareTo(BigDecimal.ZERO) < 0;
+    }
+    public boolean isGreaterThan(Money other){
+
+        return this.amount != null && this.amount.compareTo(BigDecimal.ZERO) > 0;
+    }
+
+    public Money add(Money money){
+        BigDecimal newAmount = this.amount.add(money.amount);
+        return new Money(setScale(newAmount));
+    }
+
+    private BigDecimal setScale(BigDecimal inputAmount){
+        return inputAmount.setScale(2, RoundingMode.HALF_EVEN);
+    }
+
+    public Money subtract(Money money){
+        BigDecimal newAmount = this.amount.subtract(money.amount);
+
+        return new Money(setScale(newAmount));
+    }
+
+
+    public Money multiply(int multiply){
+        BigDecimal newAmount = this.amount.multiply(BigDecimal.valueOf(multiply));
+        return new Money(setScale(newAmount));
+    }
 
 
 }

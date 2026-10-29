@@ -1,0 +1,12 @@
+
+
+server:
+  port: 9091
+
+spring:
+  application:
+    name: business-service
+  mongodb:
+    uri: mongodb://mongodb:mongodb@localhost:2026/businesses_db?authSource=admin
+    representation:
+      uuid: standard
