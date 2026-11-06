@@ -10,4 +10,5 @@ public record CancelOrderRequest(
 
         @NotNull(message = "Customer ID is required")
         UUID customerId
+
 ) {}
