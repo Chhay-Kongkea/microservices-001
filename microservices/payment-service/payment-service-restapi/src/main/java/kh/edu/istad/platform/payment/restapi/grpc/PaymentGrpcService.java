@@ -82,6 +82,7 @@ public class PaymentGrpcService
             );
 
         } catch (Exception e) {
+
             log.error("Payment processing failed", e);
 
             responseObserver.onError(
