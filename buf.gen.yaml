@@ -1,0 +1,10 @@
+version: v2
+
+plugins:
+  # Generate Java message classes
+  - remote: buf.build/protocolbuffers/java:v29.3
+    out: build/buf-generated/java
+
+  # Generate gRPC Java service classes
+  - remote: buf.build/grpc/java:v1.70.0
+    out: build/buf-generated/java
