@@ -11,5 +11,7 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-webmvc'
 
+    implementation 'build.buf:protovalidate:1.2.2'
+
 }
 
