@@ -1,3 +1,4 @@
+
 package kh.edu.istad.platform.order.client.adapter;
 
 import io.grpc.stub.ClientCallStreamObserver;
@@ -23,8 +24,6 @@ import java.util.concurrent.atomic.AtomicReference;
 public class PaymentServiceClientAdapter implements PaymentServiceClient {
 
     private static final long DEADLINE_SECONDS = 3;
-    private static final int CURRENCY_SCALE = 2;
-
 
     private final PaymentServiceGrpc.PaymentServiceStub paymentServiceStub;
 
@@ -36,38 +35,26 @@ public class PaymentServiceClientAdapter implements PaymentServiceClient {
     ) {
         return Mono.create(sink -> {
 
-            final long amountMinorUnits;
-
-            try {
-                if (orderId == null || customerId == null) {
-                    sink.error(new IllegalArgumentException(
-                            "Order ID and Customer ID are required"
-                    ));
-                    return;
-                }
-
-                if (price == null || price.signum() <= 0) {
-                    sink.error(new IllegalArgumentException(
-                            "Payment amount must be positive"
-                    ));
-                    return;
-                }
-
-
-
-            } catch (ArithmeticException e) {
+            if (orderId == null || customerId == null) {
                 sink.error(new IllegalArgumentException(
-                        "Payment amount must have at most 2 decimal places",
-                        e
+                        "Order ID and Customer ID are required"
                 ));
                 return;
             }
 
+            if (price == null || price.signum() <= 0) {
+                sink.error(new IllegalArgumentException(
+                        "Payment amount must be positive"
+                ));
+                return;
+            }
+
+            String priceValue = price.toPlainString();
 
             PayOrderRequest request = PayOrderRequest.newBuilder()
                     .setOrderId(orderId.toString())
                     .setCustomerId(customerId.toString())
-                    .setPrice(price.longValueExact())
+                    .setPrice(priceValue)
                     .build();
 
             AtomicReference<ClientCallStreamObserver<PayOrderRequest>>
@@ -76,7 +63,6 @@ public class PaymentServiceClientAdapter implements PaymentServiceClient {
             AtomicBoolean cancellationRequested = new AtomicBoolean(false);
 
             sink.onCancel(() -> {
-
                 cancellationRequested.set(true);
 
                 ClientCallStreamObserver<PayOrderRequest> call =
@@ -102,27 +88,36 @@ public class PaymentServiceClientAdapter implements PaymentServiceClient {
                                 ClientCallStreamObserver<PayOrderRequest> requestStream
                         ) {
                             callReference.set(requestStream);
+
                             if (cancellationRequested.get()) {
-                                requestStream.cancel("Reactor subscription cancelled", null);
+                                requestStream.cancel(
+                                        "Reactor subscription cancelled",
+                                        null
+                                );
                             }
                         }
 
                         @Override
                         public void onNext(PayOrderResponse response) {
+                            try {
+                                PaymentResult result = new PaymentResult(
+                                        response.getPaymentId(),
+                                        UUID.fromString(response.getOrderId()),
 
-                            PaymentResult result = new PaymentResult(
-                                    response.getPaymentId(),
-                                    UUID.fromString(response.getOrderId()),
-                                    BigDecimal.valueOf(
-                                            response.getPrice(),
-                                            CURRENCY_SCALE
-                                    ),
-                                    response.getStatus()
-                                            == PaymentStatusGrpc.PAYMENT_STATUS_COMPLETED,
-                                    response.getMessage()
-                            );
+                                        // Convert Protobuf string to BigDecimal.
+                                        new BigDecimal(response.getPrice()),
 
-                            sink.success(result);
+                                        response.getStatus()
+                                                == PaymentStatusGrpc.PAYMENT_STATUS_COMPLETED,
+
+                                        response.getMessage()
+                                );
+
+                                sink.success(result);
+
+                            } catch (Exception e) {
+                                sink.error(e);
+                            }
                         }
 
                         @Override
