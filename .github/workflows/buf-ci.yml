@@ -1,0 +1,44 @@
+
+name: Buf CI
+
+on:
+  push:
+    branches:
+      - buf-build-integration
+
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  buf:
+    name: Validate Protobuf
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Buf CLI
+        uses: bufbuild/buf-action@v1
+        with:
+          version: "1.75.0"
+          setup_only: true
+
+      - name: Check formatting
+        run: buf format --diff
+
+      - name: Build Protobuf
+        run: buf build
+
+      - name: Lint Protobuf
+        run: buf lint
+
+      - name: Check breaking changes
+        run: |
+          buf breaking --against ".git#branch=main,subdir=istad-common/istad-common-grpc-contract/src/main/proto"
