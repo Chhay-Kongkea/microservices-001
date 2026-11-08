@@ -3,6 +3,6 @@ rootProject.name = 'microservices'
 includeBuild 'business-service'
 includeBuild 'customer-service'
 includeBuild 'order-service'
-includeBuild 'gateway-server'
 includeBuild 'payment-service'
-includeBuild '../istad-common'
+includeBuild 'gateway-server'
+

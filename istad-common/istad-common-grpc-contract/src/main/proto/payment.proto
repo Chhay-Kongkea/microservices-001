@@ -11,14 +11,21 @@ service PaymentService {
 }
 
 message PayOrderRequest {
-  string order_id = 1;
-  string customer_id = 2;
-  string amount = 3;
+  string orderId = 1;
+  string customerId = 2;
+  int64 price = 3;
 }
 
 message PayOrderResponse {
-  string payment_id = 1;
-  string order_id = 2;
-  bool successful = 3;
-  string message = 4;
+  string paymentId = 1;
+  string orderId = 2;
+  int64 price = 3;
+  PaymentStatusGrpc status = 4;
+  string message = 5;
+}
+
+enum PaymentStatusGrpc {
+  PAYMENT_STATUS_COMPLETED = 0;
+  PAYMENT_STATUS_CANCELED = 1;
+  PAYMENT_STATUS_FAILED = 2;
 }

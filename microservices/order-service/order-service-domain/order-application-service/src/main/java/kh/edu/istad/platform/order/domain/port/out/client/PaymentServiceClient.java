@@ -1,10 +1,17 @@
 package kh.edu.istad.platform.order.domain.port.out.client;
 
-import kh.edu.istad.platform.order.domain.dto.PayOrderCommand;
-import kh.edu.istad.platform.order.domain.dto.PayOrderResult;
+import kh.edu.istad.platform.order.domain.dto.PaymentResult;
 import reactor.core.publisher.Mono;
+
+import java.math.BigDecimal;
+import java.util.UUID;
 
 public interface PaymentServiceClient {
 
-    Mono<PayOrderResult> payOrder(PayOrderCommand command);
+    Mono<PaymentResult> initiatePayment(
+            UUID orderId,
+            UUID customerId,
+            BigDecimal price
+    );
+
 }

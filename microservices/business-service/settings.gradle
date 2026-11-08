@@ -5,16 +5,26 @@ pluginManagement {
         gradlePluginPortal()
         mavenCentral()
     }
-
 }
 
 dependencyResolutionManagement {
     repositories {
         mavenCentral()
     }
+
     versionCatalogs{
         libs{
             from(files("../../gradle/libs.versions.toml"))
         }
     }
 }
+
+
+rootProject.name = 'business-service'
+
+
+include 'business-service-main'
+include 'business-service-domain:business-application-service'
+include 'business-service-domain:business-domain-core'
+include 'business-service-persistence'
+include 'business-service-restapi'

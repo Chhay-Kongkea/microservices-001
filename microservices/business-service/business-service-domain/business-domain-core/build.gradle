@@ -1,0 +1,16 @@
+plugins {
+    id 'java-common-conventions'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs.add("-parameters")
+}
+
+dependencies {
+
+    api('kh.edu.istad:istad-common-domain')
+    implementation 'org.springframework.data:spring-data-commons:4.1.1'
+
+
+}
+

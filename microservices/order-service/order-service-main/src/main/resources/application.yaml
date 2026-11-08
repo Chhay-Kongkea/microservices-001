@@ -2,11 +2,12 @@
 spring:
   application:
     name: order-service
+
   grpc:
     client:
       channel:
         payment:
-          target: static://localhost:9091
+          target: static://localhost:50000
   profiles:
     active: dev
   config:
@@ -40,9 +41,9 @@ spring:
 global:
   version: "1.0.0"
 server:
-  port: 20000
+  port: 9092
 
-  http:
-    serviceclient:
-      customer:
-        base-url: http://customer-service
+http:
+  serviceclient:
+    customer:
+      base-url: http://customer-service

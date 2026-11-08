@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.UUID;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/customers")
@@ -38,6 +40,10 @@ public class CustomerController {
         return queryCustomerUseCase.query();
     }
 
+    @GetMapping("/{id}")
+    public Mono<Customer> findById(@PathVariable("id") UUID  id){
+        return queryCustomerUseCase.findById(id);
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

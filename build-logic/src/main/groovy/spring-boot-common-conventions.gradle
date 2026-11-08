@@ -6,9 +6,15 @@ plugins {
 group = 'kh.edu.istad'
 version = '1.0.0'
 
+//java {
+//    toolchain {
+//        languageVersion = JavaLanguageVersion.of(libs.versions.java.version.get())
+//    }
+//}
+
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(libs.versions.java.version.get())
+        languageVersion = JavaLanguageVersion.of(25)
     }
 }
 

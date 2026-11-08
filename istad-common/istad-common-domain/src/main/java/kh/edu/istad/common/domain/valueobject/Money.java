@@ -21,6 +21,10 @@ public record Money(
         return this.amount != null && this.amount.compareTo(other.amount) > 0;
     }
 
+    public boolean isLessThan(Money other) {
+        return this.amount != null && this.amount.compareTo(other.amount) < 0;
+    }
+
     public Money add(Money money) {
         BigDecimal newAmount = this.amount.add(money.amount);
         return new Money(setScale(newAmount));
