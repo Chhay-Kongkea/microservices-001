@@ -8,7 +8,7 @@ on:
 
   pull_request:
     branches:
-      - main
+      - assignment_05
 
 permissions:
   contents: read
@@ -41,4 +41,4 @@ jobs:
 
       - name: Check breaking changes
         run: |
-          buf breaking --against ".git#branch=main,subdir=istad-common/istad-common-grpc-contract/src/main/proto"
+          buf breaking --against ".git#branch=assignment_05,subdir=istad-common/istad-common-grpc-contract/src/main/proto"
